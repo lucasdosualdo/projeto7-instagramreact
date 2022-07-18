@@ -1,30 +1,38 @@
-function Topo(props) {
+import React from 'react';
+
+function Topo({imgUser, user}) {
     return (
         <div class="topo">
             <div class="usuario">
-                <img src={props.imgUser} />
-                {props.user}
+                <img src={imgUser} />
+                {user}
             </div>
             <div class="acoes">
-                <ion-icon name={props.ionicon}></ion-icon>
+                <ion-icon name="ellipsis-horizontal"></ion-icon>
             </div>
         </div>
     )
 }
-function Conteudo(props) {
+function Conteudo({imgContent, likedTesteConteudo}) {
     return (
         <div class="conteudo">
-            <img src={props.imgContent} />
+            <img src={imgContent}
+                onClick={likedTesteConteudo} />
+        
         </div>
     )
 }
-function Fundo(props) {
+function Fundo({likedImg, likedUser, likedQnt, likedTesteFundo, like}) {
 
     return (
         <div class="fundo">
             <div class="acoes">
                 <div>
-                    <ion-icon name="heart-outline"></ion-icon>
+                    {like ?
+                            <ion-icon name='heart-outline' onClick={likedTesteFundo}></ion-icon> :
+                            <ion-icon name="heart" style={{ color: 'red' }} onClick={likedTesteFundo}></ion-icon>
+                    }
+
                     <ion-icon name="chatbubble-outline"></ion-icon>
                     <ion-icon name="paper-plane-outline"></ion-icon>
                 </div>
@@ -34,35 +42,46 @@ function Fundo(props) {
             </div>
 
             <div class="curtidas">
-                <img src={props.likedImg} />
+                <img src={likedImg} />
                 <div class="texto">
-                    Curtido por <strong>{props.likedUser}</strong> e <strong>outras {props.likedQnt} pessoas</strong>
+                    Curtido por <strong>{likedUser}</strong> e <strong>outras {likedQnt} pessoas</strong>
                 </div>
             </div>
         </div>
     )
 }
 
-export default function Post(props) {
+export default function Post({imgUser, user, imgContent, likedImg, likedUser, likedQnt, likeValue}) {
 
-
+    const [like, setLike] = React.useState({ likeValue });
+    console.log({ likeValue });
+    function likedTesteFundo() {
+        setLike(!like);
+    }
+    function likedTesteConteudo() {
+        setLike(false);
+    }
 
     return (
         <div class="post">
             <Topo
-                imgUser={props.imgUser}
-                user={props.user}
+                imgUser={imgUser}
+                user={user}
 
             />
             <Conteudo
-                imgContent={props.imgContent}
+                imgContent={imgContent}
+                like={like}
+                likedTesteConteudo={likedTesteConteudo}
             />
 
 
             <Fundo
-                likedImg={props.likedImg}
-                likedUser={props.likedUser}
-                likedQnt={props.likedQnt}
+                likedImg={likedImg}
+                likedUser={likedUser}
+                likedQnt={likedQnt}
+                like={like}
+                likedTesteFundo={likedTesteFundo}
             />
         </div>
     )
